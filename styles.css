@@ -1,28 +1,108 @@
 body {
-    width: 10vw;
     margin: auto;
+    font-family: 'Roboto Mono', arial;
+    font-weight: 700;
+    background-color: #ffffff;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin: 0 auto;
+    padding-top: 30px;
 }
 
 .btnContainer {
+    margin: auto;
     display: grid;
     grid-template-columns: repeat(4, 1fr) ;
-    width: 100px;
+    height: 400px;
+    width: 100%;
+    gap: 0px;
 }
 
 .span {
     grid-column: span 2;
 }
 
-.calculator {
-    display: flex;
-    flex-direction: column;
-    width: 200px;
-}
-
 .display {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     border: 1px solid black;
     width: 100%;
-    height: 100px;
+    min-height: 100px;
+    background-color: #cfcfcf;
+    color: white;
+
+}
+
+.previousDisplay {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    text-align: right;
+    float: right;
+    font-size: 25px;
+    margin-right: 10px;
+    margin-bottom: none;
+    min-height: 25px;
+}
+
+.previousDisplay > p {
+    width: auto;
+    word-wrap: break-word;
+    white-space: initial;
+    overflow: hidden;
+}
+
+.currentDisplay {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    text-align: right;
+    float: right;
+    font-size: 50px;
+    margin-right: 10px;
+    margin-bottom: none;
+    min-height: 50px;
+    
+}
+
+.currentDisplay > p {
+    width: auto;
+    word-wrap: break-word;
+    white-space: initial;
+    overflow: hidden;
+    
+}
+
+button[data-type="input"] {
+    background-color: #86d3d8;
+}
+
+button[data-type="operation"] {
+    background-color: #868dd8;
+}
+
+button[data-type="function"] {
+    background-color: #d886cd;
+}
+
+.btn {
+    border: 1px solid;
+    font-family: 'Roboto Mono', arial;
+    font-weight: 700;
+    font-size: 20px;
+    color: white;
+    
+}
+
+.btn:hover {
+    cursor: pointer;
+    filter: brightness(80%);
 }

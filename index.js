@@ -3,21 +3,71 @@ const prevTxtDisplay = document.getElementById("previousTxt");
 const crntTxtDisplay = document.getElementById("currentTxt");
 
 // ADD KEYBOARD FUNCTIONALITY
+// Can't divide by 0
+// Clear and delete functions - completed
 
 let currentNum = "";
-let previousNum = "";
+let previousNum = "0";
 let newNum = "";
 let selectedOperator = "";
 let currentTxt = "";
 let previousTxt = "";
 let summaryTxt = "";
-
+let operated = false;
+let numbers = 0;
 
 allBtns.forEach((button) => {
     button.addEventListener('click', () => {
         btnChecker(button);
     })
 });
+
+
+document.addEventListener("keydown", (e) => {
+    if (e.key == "." || (e.key >= 0 && e.key <= 9)) {
+      e.preventDefault();
+      document.querySelector(`button[value="${e.key}"`).click(); 
+      console.log(e.key);
+    } else if (e.key == "Enter" || e.key == "=") {
+        e.preventDefault();
+        document.getElementById("equals").click();
+    } else if (e.key == "Backspace") {
+        e.preventDefault();
+      document.getElementById("delete").click()
+      } else if (e.key == "Escape") {
+        e.preventDefault();
+      document.getElementById("clear").click()
+      } else if (e.key == "Add" || e.key == "+") {
+        e.preventDefault();
+      document.getElementById("add").click()
+      } else if (e.key == "Subtract" || e.key == "-") {
+        e.preventDefault();
+      document.getElementById("subtract").click()
+      } else if (e.key == "Divide" || e.key == "/") {
+        e.preventDefault();
+      document.getElementById("divide").click()
+      } else if (e.key == "Multiply" || e.key == "*") {
+        e.preventDefault();
+      document.getElementById("multiply").click()
+      }
+});
+
+/*function handleKeyboardInput(e) {
+    if (e.key >= 0 && e.key <= 9) btnChecker(e.)
+    if (e.key === '.') appendPoint()
+    if (e.key === '=' || e.key === 'Enter') evaluate()
+    if (e.key === 'Backspace') deleteNumber()
+    if (e.key === 'Escape') clear()
+    if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/')
+      setOperation(convertOperator(e.key))
+  }
+  
+  function convertOperator(keyboardOperator) {
+    if (keyboardOperator === '/') return '÷'
+    if (keyboardOperator === '*') return '×'
+    if (keyboardOperator === '-') return '−'
+    if (keyboardOperator === '+') return '+'
+  }*/
 
 function btnChecker(button) {
     let btnAtt = button.getAttribute("data-type")
@@ -36,35 +86,61 @@ function btnChecker(button) {
 
 function numberInput(button) {
     let numValue = button.getAttribute("value");
+    if (currentNum.includes(".") && numValue == ".") {
+        return;
+    } else {
     currentNum += numValue;
+    if (selectedOperator == "equals") {
+        if (prevTxtDisplay.textContent.includes("+")) selectedOperator = "add";
+        if (prevTxtDisplay.textContent.includes("-")) selectedOperator = "subtract";
+        if (prevTxtDisplay.textContent.includes("÷")) selectedOperator = "divide";
+        if (prevTxtDisplay.textContent.includes("×")) selectedOperator = "multiply";
+    }
     updateDisplay();
     console.log(currentNum);
+    }
 }
 
 function operation(button) {
-    if (button.getAttribute("id") == "equals") {
-        prevTxtDisplay.textContent += " " + `${currentNum}`
+    if (button.getAttribute("id") == "equals" && prevTxtDisplay.textContent.includes("=") == true && currentNum == "") {
+        return;
+    }
+    else if (button.getAttribute("id") == "equals" && prevTxtDisplay.textContent.includes("=") == false && currentNum !== "") {
+        prevTxtDisplay.textContent += " " + `${currentNum}`;
+        console.log(selectedOperator);
         equals();
-    } else if (selectedOperator !== "" && currentNum == "") {
+        console.log("this runs");
+    }
+    else if (selectedOperator !== "" && currentNum == "") {
         selectedOperator = button.getAttribute("id");
         updateDisplay();
+        console.log("nah this runs ")
     } 
     else if (selectedOperator !== "") {
         equals();
+        console.log("this runs too fsr")
     }
     selectedOperator = button.getAttribute("id");
+    console.log(selectedOperator);
     nextNumber();
 }
 
 function calcFunction(button) {
     if (button.getAttribute("id") == "clear") {
         currentNum = "";
-        previousNum = "";
+        previousNum = "0";
         selectedOperator = "";
+        prevTxtDisplay.textContent = "";
+        crntTxtDisplay.textContent = "";
     }
     if (button.getAttribute("id") == "delete") {
+        currentNum = crntTxtDisplay.textContent;
         currentNum = currentNum.slice(0, -1);
         console.log(currentNum);
+        crntTxtDisplay.textContent = crntTxtDisplay.textContent.slice(0, -1); 
+        if (currentNum == "") {
+            currentNum = "0";
+        }       
     }
 }
 
@@ -81,42 +157,49 @@ function storeNum(numValue) {
 
 function nextNumber() {
     if (currentNum == "") {
-        return;
+       return;
     } else {
     previousNum = currentNum;
     currentNum = "";
-    console.log(previousNum);
+    //console.log(previousNum + "dop");
     }
+    //console.log(numbers);
+    console.log(selectedOperator);
     updateDisplay();
 }
 
 // MATH FUNCTIONS
 
 function divide(a, b) {
+    if (b == "0") {
+        alert("Why would you divide by 0? Just why?");
+
+    } else {
     let divided = Math.round((parseFloat(a) / parseFloat(b)) * 1000) / 1000;
     currentNum = divided.toString();
     console.log(currentNum);
     return a / b;
+    }
 }
 
 function multiply(a, b) {
     let multiplied = Math.round(parseFloat(a) * parseFloat(b) * 1000) / 1000;
     currentNum = multiplied.toString();
-    console.log(currentNum);
+    //console.log(currentNum);
     return a * b;
 }
 
 function subtract(a, b) {
     let sub = parseFloat(a) - parseFloat(b);
     currentNum = sub.toString();
-    console.log(currentNum);
+    //console.log(currentNum);
     return a - b;
 }
 
 function add(a, b) {
     let sum = parseFloat(a) + parseFloat(b);
     currentNum = sum.toString();
-    console.log(currentNum);
+    //console.log(currentNum);
     return a + b;
 }
 
@@ -134,6 +217,7 @@ function equals() {
         multiply(previousNum, currentNum);
         selectedOperator = "";
     }
+    console.log(selectedOperator);
     updateDisplay();
 }
 
@@ -159,9 +243,14 @@ function updateDisplay() {
         crntTxtDisplay.textContent = `${currentNum}`;
         prevTxtDisplay.textContent = `${previousNum}`;
         prevTxtDisplay.textContent += " " + "×";
-    } if (selectedOperator == "equals") {
+    } if (selectedOperator == "equals" && prevTxtDisplay.textContent.includes("=") == true && currentNum == "") {
+        return;
+    } else if (selectedOperator == "equals") {
         prevTxtDisplay.textContent += " " + "=";
         crntTxtDisplay.textContent = `${previousNum}`;
+        console.log("equals sign")
+        selectedOperator = "";
     }
+    console.log(selectedOperator);
     
 }
