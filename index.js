@@ -108,15 +108,18 @@ function operation(button) {
     else if (button.getAttribute("id") == "equals" && prevTxtDisplay.textContent.includes("=") == false && currentNum !== "") {
         prevTxtDisplay.textContent += " " + `${currentNum}`;
         console.log(selectedOperator);
+        operated = false;
         equals();
         console.log("this runs");
     }
     else if (selectedOperator !== "" && currentNum == "") {
         selectedOperator = button.getAttribute("id");
+        operated = false;
         updateDisplay();
         console.log("nah this runs ")
     } 
     else if (selectedOperator !== "") {
+        operated = false;
         equals();
         console.log("this runs too fsr")
     }
@@ -137,10 +140,7 @@ function calcFunction(button) {
         currentNum = crntTxtDisplay.textContent;
         currentNum = currentNum.slice(0, -1);
         console.log(currentNum);
-        crntTxtDisplay.textContent = crntTxtDisplay.textContent.slice(0, -1); 
-        if (currentNum == "") {
-            currentNum = "0";
-        }       
+        crntTxtDisplay.textContent = crntTxtDisplay.textContent.slice(0, -1);     
     }
 }
 
@@ -207,15 +207,19 @@ function equals() {
     if (selectedOperator == "add") {
         add(previousNum, currentNum);
         selectedOperator = "";
+        operated = true;
     } if (selectedOperator == "subtract") {
         subtract(previousNum, currentNum);
         selectedOperator = "";
+        operated = true;
     } if (selectedOperator == "divide") {
         divide(previousNum, currentNum);
         selectedOperator = "";
+        operated = true;
     } if (selectedOperator == "multiply") {
         multiply(previousNum, currentNum);
         selectedOperator = "";
+        operated = true;
     }
     console.log(selectedOperator);
     updateDisplay();
@@ -243,14 +247,24 @@ function updateDisplay() {
         crntTxtDisplay.textContent = `${currentNum}`;
         prevTxtDisplay.textContent = `${previousNum}`;
         prevTxtDisplay.textContent += " " + "×";
-    } if (selectedOperator == "equals" && prevTxtDisplay.textContent.includes("=") == true && currentNum == "") {
+    } if (selectedOperator == "equals" && prevTxtDisplay.textContent.includes("=") && currentNum == "") {
+        console.log("false")
         return;
-    } else if (selectedOperator == "equals") {
+    } else if (selectedOperator == "equals" && currentNum !== "" && previousNum == "") {
+        prevTxtDisplay.textContent += " " + "=";
+        crntTxtDisplay.textContent = `${previousNum}`;
+        console.log("equals sign boo")
+        selectedOperator = "";
+    } else if (selectedOperator == "equals" && operated == true) {
         prevTxtDisplay.textContent += " " + "=";
         crntTxtDisplay.textContent = `${previousNum}`;
         console.log("equals sign")
         selectedOperator = "";
+        operated = false;
+    } else if (selectedOperator == "equals") {
+        crntTxtDisplay.textContent = `${currentNum}`;
     }
+
     console.log(selectedOperator);
     
 }
