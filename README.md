@@ -18,5 +18,5 @@ A fully functional calculator that works with 2 numbers at a time.
 ### Built With
 
 * HTML
-* CSS (Flexbox)
+* CSS
 * JavaScript
