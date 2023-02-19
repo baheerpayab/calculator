@@ -13,7 +13,7 @@ Final Project of the Foundations Path on The Odin Project.
 A fully functional calculator that works with 2 numbers at a time.
 
 #### Learned:
-- fortifying HTML, CSS, and JS skills.
+- fortifying HTML, CSS, and JS skills
 
 ### Built With
 
